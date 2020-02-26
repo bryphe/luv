@@ -10,6 +10,7 @@
  ;(library_flags -ccopt -luv -ccopt -l/Users/bryphe/luv/_esy/default/store/i/esy_libuv-0effda09/lib)
  (foreign_stubs
   (language c)
+  (flags (:include c_flags.sexp))
   (names c_generated_functions helpers)))
 ;  (include_dirs vendor/libuv/include))
 ; (foreign_archives uv))
@@ -102,7 +103,7 @@
 
     
 (rule
-    (targets flags.sexp)
+    (targets c_flags.sexp flags.sexp)
     (deps (:discover config/discover.exe))
     (action (run %{discover})))
 

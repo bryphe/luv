@@ -24,10 +24,18 @@ let libPath = "-L" ^ (Sys.getenv "LIBUV_LIB_PATH")
 let ccopt s = ["-ccopt"; s]
 let cclib s = ["-cclib"; s]
 
+let c_flags = ["-I"; (Sys.getenv "LIBUV_INCLUDE_PATH");]
+
+let c_flags = match get_os with
+    | Linux -> c_flags @ ["-fPIC"]
+    | _ -> c_flags
+;;
+
 let flags =
     []
         @ ccopt(libPath)
         @ cclib("-luv")
 ;;
 
+Configurator.V1.Flags.write_sexp "c_flags.sexp" c_flags;
 Configurator.V1.Flags.write_sexp "flags.sexp" flags;
