@@ -59,6 +59,9 @@
  (with-stdout-to generate_types_step_2.c
   (run ./generate_types_start.exe)))
 
+(rule (targets ctypes_path.txt)
+      (action (with-stdout-to %{targets} (run ocamlfind query ctypes))))
+      
 ; Based partially on
 ;   https://github.com/avsm/ocaml-yaml/blob/master/types/stubgen/jbuild#L20
 (rule
@@ -66,9 +69,9 @@
  (deps (:c generate_types_step_2.c) helpers.h)
  (action (bash "\
   %{cc} %{c} \
-  -I `dirname %{lib:ctypes:ctypes_cstubs_internals.h}` \
+  -I %{read-lines:ctypes_path.txt} \
   -I %{ocaml_where} \
-  -I vendor/libuv/include -o %{targets}")))
+  -I %{env:LIBUV_INCLUDE_PATH=vendor/include/libuv} -o %{targets}")))
 
 (rule
  (with-stdout-to luv_c_generated_types.ml

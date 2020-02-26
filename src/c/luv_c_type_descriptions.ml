@@ -126,7 +126,7 @@ struct
     module Option =
     struct
       let block_signal = constant "UV_LOOP_BLOCK_SIGNAL" int
-      let sigprof = constant "SIGPROF" int
+      (*let sigprof = constant "SIGPROF" int*)
     end
 
     type t = [ `Loop ] structure
@@ -398,9 +398,9 @@ struct
       let iwoth = constant "S_IWOTH" int
       let ixoth = constant "S_IXOTH" int
 
-      let isuid = constant "S_ISUID" int
+      (*let isuid = constant "S_ISUID" int
       let isgid = constant "S_ISGID" int
-      let isvtx = constant "S_ISVTX" int
+      let isvtx = constant "S_ISVTX" int*)
     end
 
     module Dirent =
