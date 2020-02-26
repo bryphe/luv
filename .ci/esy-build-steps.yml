@@ -10,5 +10,3 @@ steps:
     displayName: 'esy install'
   - script: esy build
     displayName: 'esy build'
-  - script: esy b dune exec example/hello_world.exe
-    displayName: 'example/hello_world'
