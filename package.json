@@ -22,14 +22,16 @@
   },
   "dependencies": {
     "@opam/dune": "^2.0.0",
+    "@opam/dune-configurator": "^2.0.0",
     "ocaml": ">=4.2.0",
     "@opam/ctypes": "0.15.1",
     "@opam/ctypes-foreign": "0.4.0",
-    "esy-libuv": "github:revery-ui/esy-libuv#39e3ef0"
+    "esy-libuv": "*"
   },
   "resolutions": {
     "@esy-ocaml/libffi": "esy-ocaml/libffi#c61127d",
-    "esy-cmake": "prometheansacrifice/esy-cmake#2a47392def"
+    "esy-cmake": "prometheansacrifice/esy-cmake#2a47392def",
+    "esy-libuv": "revery-ui/esy-libuv#81e2725"
   },
   "devDependencies": {
     "ocaml": "~4.8.0"
