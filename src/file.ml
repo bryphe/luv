@@ -121,7 +121,7 @@ struct
     | `IWOTH
     | `IXOTH
 
-(** TODO: Not supported on Windows
+(* TODO: Not supported on Windows
     | `ISUID
     | `ISGID
     | `ISVTX

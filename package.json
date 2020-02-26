@@ -34,6 +34,7 @@
     "esy-libuv": "revery-ui/esy-libuv#81e2725"
   },
   "devDependencies": {
-    "ocaml": "~4.8.0"
+    "ocaml": "~4.8.0",
+    "@opam/alcotest": "*"
   }
 }

@@ -126,7 +126,9 @@ struct
     module Option =
     struct
       let block_signal = constant "UV_LOOP_BLOCK_SIGNAL" int
-      (*let sigprof = constant "SIGPROF" int*)
+      let sigprof = match Sys.win32 with 
+      | false -> constant "SIGPROF" int
+      | true -> constant "0" int
     end
 
     type t = [ `Loop ] structure

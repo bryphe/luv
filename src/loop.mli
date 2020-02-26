@@ -79,9 +79,7 @@ module Option :
 sig
   type 'value t
   val block_signal : int t
-  (** TODO: Not supported on Windows
   val sigprof : int
-  *)
 end
 
 val configure : t -> 'value Option.t -> 'value -> (unit, Error.t) result
