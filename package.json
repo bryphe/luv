@@ -26,12 +26,11 @@
     "ocaml": ">=4.2.0",
     "@opam/ctypes": "0.15.1",
     "@opam/ctypes-foreign": "0.4.0",
-    "esy-libuv": "*"
+    "esy-libuv": "github:revery-ui/esy-libuv#89d293b"
   },
   "resolutions": {
     "@esy-ocaml/libffi": "esy-ocaml/libffi#c61127d",
-    "esy-cmake": "prometheansacrifice/esy-cmake#2a47392def",
-    "esy-libuv": "revery-ui/esy-libuv#81e2725"
+    "esy-cmake": "prometheansacrifice/esy-cmake#2a47392def"
   },
   "devDependencies": {
     "ocaml": "~4.8.0",
