@@ -624,20 +624,47 @@ int luv_spawn(
 {
     args[arg_count] = NULL;
 
-    if (set_env)
-        env[env_count] = NULL;
-    else
-        env = NULL;
+    // Create a duplicate of the args & env string arrays,
+    // as well as the cwd and file, in case the GC decides to move them...
+    char **args_dup = NULL;
+    char **env_dup = NULL;
+    char *file_dup = NULL;
+    char *cwd_dup = NULL;
 
-    if (do_cwd == 0)
-        cwd = NULL;
+    if (file != NULL) {
+        file_dup = uv__strdup(file);
+    }
+
+    args_dup = (char **)uv__malloc(sizeof(char *) * (arg_count + 1));
+
+    for (int i = 0; i < arg_count; i++) {
+        args_dup[i] = uv__strdup(args[i]);
+    }
+    args_dup[arg_count] = NULL;
+    fprintf(stderr, "luv_spawn: copied args...\n");
+
+    if (set_env) {
+        env_dup = (char **)uv__malloc(sizeof(char *) * (env_count + 1));
+        for (int i = 0; i < env_count; i++) {
+            env_dup[i] = uv__strdup(env[i]);
+        }
+        env_dup[env_count] = NULL;
+    } else {
+        env_dup = NULL;
+    }
+
+    if (do_cwd == 0) {
+        cwd_dup = NULL;
+    } else {
+        cwd_dup = uv__strdup(cwd);
+    }
 
     uv_process_options_t options;
     options.exit_cb = exit_cb;
-    options.file = file;
-    options.args = args;
-    options.env = env;
-    options.cwd = cwd;
+    options.file = file_dup;
+    options.args = args_dup;
+    options.env = env_dup;
+    options.cwd = cwd_dup;
     options.flags = flags;
     options.stdio_count = stdio_count;
     options.stdio = stdio;
@@ -647,6 +674,24 @@ int luv_spawn(
     caml_release_runtime_system();
     int result = uv_spawn(loop, handle, &options);
     caml_acquire_runtime_system();
+
+    // Free allocated memory that we held across the runtime boundary
+    uv__free(cwd_dup);
+    uv__free(file_dup);
+
+    if (env_dup != NULL) {
+        for (int i = 0; i < env_count; i++) {
+            uv__free(env_dup[i]);
+        }
+        uv__free(env_dup);
+    }
+
+    if (args_dup != NULL) {
+        for (int i = 0; i < arg_count; i++) {
+            uv__free(args_dup[i]);
+        }
+        uv__free(args_dup);
+    }
 
     return result;
 }
