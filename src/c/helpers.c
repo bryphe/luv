@@ -641,7 +641,6 @@ int luv_spawn(
         args_dup[i] = uv__strdup(args[i]);
     }
     args_dup[arg_count] = NULL;
-    fprintf(stderr, "luv_spawn: copied args...\n");
 
     if (set_env) {
         env_dup = (char **)uv__malloc(sizeof(char *) * (env_count + 1));
