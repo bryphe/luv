@@ -632,20 +632,28 @@ int luv_spawn(
     char *cwd_dup = NULL;
 
     if (file != NULL) {
-        file_dup = uv__strdup(file);
+        file_dup = strdup(file);
     }
 
-    args_dup = (char **)uv__malloc(sizeof(char *) * (arg_count + 1));
+    args_dup = (char **)malloc(sizeof(char *) * (arg_count + 1));
 
     for (int i = 0; i < arg_count; i++) {
-        args_dup[i] = uv__strdup(args[i]);
+        if (args[i] != NULL) {
+            args_dup[i] = strdup(args[i]);
+        } else {
+            args_dup[i] = NULL;
+        }
     }
     args_dup[arg_count] = NULL;
 
     if (set_env) {
-        env_dup = (char **)uv__malloc(sizeof(char *) * (env_count + 1));
+        env_dup = (char **)malloc(sizeof(char *) * (env_count + 1));
         for (int i = 0; i < env_count; i++) {
-            env_dup[i] = uv__strdup(env[i]);
+            if (env[i] != NULL) {
+                env_dup[i] = strdup(env[i]);
+            } else {
+                env_dup[i] = NULL;
+            }
         }
         env_dup[env_count] = NULL;
     } else {
@@ -655,7 +663,7 @@ int luv_spawn(
     if (do_cwd == 0) {
         cwd_dup = NULL;
     } else {
-        cwd_dup = uv__strdup(cwd);
+        cwd_dup = strdup(cwd);
     }
 
     uv_process_options_t options;
@@ -675,21 +683,26 @@ int luv_spawn(
     caml_acquire_runtime_system();
 
     // Free allocated memory that we held across the runtime boundary
-    uv__free(cwd_dup);
-    uv__free(file_dup);
+    if (cwd_dup != NULL) {
+        free(cwd_dup);
+    }
+
+    if (file_dup != NULL) {
+        free(file_dup);
+    }
 
     if (env_dup != NULL) {
         for (int i = 0; i < env_count; i++) {
-            uv__free(env_dup[i]);
+            free(env_dup[i]);
         }
-        uv__free(env_dup);
+        free(env_dup);
     }
 
     if (args_dup != NULL) {
         for (int i = 0; i < arg_count; i++) {
-            uv__free(args_dup[i]);
+            free(args_dup[i]);
         }
-        uv__free(args_dup);
+        free(args_dup);
     }
 
     return result;
