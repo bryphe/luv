@@ -78,9 +78,15 @@ let null_callback =
   C.Functions.Process.get_null_callback ()
 
 let c_string_array strings =
-  strings @ [""]
-  |> Ctypes.(CArray.of_list string)
-  |> Ctypes.CArray.start
+  let c_string_ptrs = strings @ [""]
+    |> List.map Ctypes.(allocate string) 
+  in
+  let c_strings =
+    c_string_ptrs
+    |> Ctypes.(CArray.of_list (ptr string))
+    |> Ctypes.CArray.start
+  in
+  (c_string_ptrs, c_strings)
 
 let spawn
     ?loop
@@ -152,15 +158,20 @@ let spawn
 
   let redirections, redirection_count = build_redirection_array redirect in
 
+  let gc_arg_handles, c_args = c_string_array arguments in 
+  let gc_env_handles, c_env = c_string_array env in
+
+  let gc_handles = ref (Some (gc_arg_handles, gc_env_handles)) in
+
   let result =
     C.Functions.Process.spawn
       loop
       process
       callback
       (Ctypes.ocaml_string_start path)
-      (c_string_array arguments)
+      c_args
       (List.length arguments)
-      (c_string_array env)
+      c_env
       env_count
       set_env
       (Ctypes.ocaml_string_start cwd)
@@ -171,6 +182,8 @@ let spawn
       uid
       gid
   in
+
+  let () = gc_handles := None in
 
   if result < 0 then begin
     Handle.close process ignore

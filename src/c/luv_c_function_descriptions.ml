@@ -1198,9 +1198,9 @@ struct
          ptr t @->
          exit_cb @->
          ocaml_string @->
-         ptr string @->
+         ptr (ptr string) @->
          int @->
-         ptr string @->
+         ptr (ptr string) @->
          int @->
          bool @->
          ocaml_string @->
