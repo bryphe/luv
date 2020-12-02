@@ -161,20 +161,23 @@ let spawn
   let gc_arg_handles, c_args = c_string_array arguments in 
   let gc_env_handles, c_env = c_string_array env in
 
-  let gc_handles = ref (Some (gc_arg_handles, gc_env_handles)) in
+  let c_cwd = Ctypes.(allocate string cwd) in
+  let c_path = Ctypes.(allocate string path) in
+
+  let gc_handles = ref (Some (gc_arg_handles, gc_env_handles, c_cwd, c_path)) in
 
   let result =
     C.Functions.Process.spawn
       loop
       process
       callback
-      (Ctypes.ocaml_string_start path)
+      c_path
       c_args
       (List.length arguments)
       c_env
       env_count
       set_env
-      (Ctypes.ocaml_string_start cwd)
+      c_cwd
       do_cwd
       flags
       redirection_count

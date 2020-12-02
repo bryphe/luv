@@ -1197,13 +1197,13 @@ struct
         (ptr Loop.t @->
          ptr t @->
          exit_cb @->
-         ocaml_string @->
+         ptr string @->
          ptr (ptr string) @->
          int @->
          ptr (ptr string) @->
          int @->
          bool @->
-         ocaml_string @->
+         ptr string @->
          bool @->
          int @->
          int @->
