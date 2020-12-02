@@ -152,18 +152,24 @@ let spawn
 
   let redirections, redirection_count = build_redirection_array redirect in
 
+  let c_path = Ctypes.ocaml_string_start path in
+  let c_args = c_string_array arguments in
+  let c_args_len = List.length arguments in 
+  let c_env = c_string_array env in
+  let c_cwd = Ctypes.ocaml_string_start cwd in
+
   let result =
     C.Functions.Process.spawn
       loop
       process
       callback
-      (Ctypes.ocaml_string_start path)
-      (c_string_array arguments)
-      (List.length arguments)
-      (c_string_array env)
+      c_path
+      c_args
+      c_args_len
+      c_env
       env_count
       set_env
-      (Ctypes.ocaml_string_start cwd)
+      c_cwd
       do_cwd
       flags
       redirection_count
