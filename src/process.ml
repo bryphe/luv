@@ -158,6 +158,8 @@ let spawn
   let c_env = c_string_array env in
   let c_cwd = Ctypes.ocaml_string_start cwd in
 
+  let hold = ref (Some (arguments, env, cwd, path)) in
+
   let result =
     C.Functions.Process.spawn
       loop
@@ -177,6 +179,8 @@ let spawn
       uid
       gid
   in
+
+  let () = hold := None in
 
   if result < 0 then begin
     Handle.close process ignore
