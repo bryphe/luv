@@ -1197,13 +1197,13 @@ struct
         (ptr Loop.t @->
          ptr t @->
          exit_cb @->
-         ptr string @->
-         ptr (ptr string) @->
+         ptr char @->
+         ptr (ptr char) @->
          int @->
-         ptr (ptr string) @->
+         ptr (ptr char) @->
          int @->
          bool @->
-         ptr string @->
+         ptr char @->
          bool @->
          int @->
          int @->

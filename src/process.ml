@@ -79,11 +79,12 @@ let null_callback =
 
 let c_string_array strings =
   let c_string_ptrs = strings @ [""]
-    |> List.map Ctypes.(allocate string) 
+    |> List.map Ctypes.(CArray.of_string) 
+    |> List.map Ctypes.CArray.start
   in
   let c_strings =
     c_string_ptrs
-    |> Ctypes.(CArray.of_list (ptr string))
+    |> Ctypes.(CArray.of_list (ptr char))
     |> Ctypes.CArray.start
   in
   (c_string_ptrs, c_strings)
@@ -161,8 +162,8 @@ let spawn
   let gc_arg_handles, c_args = c_string_array arguments in 
   let gc_env_handles, c_env = c_string_array env in
 
-  let c_cwd = Ctypes.(allocate string cwd) in
-  let c_path = Ctypes.(allocate string path) in
+  let c_cwd = cwd |> Ctypes.(CArray.of_string) |> Ctypes.CArray.start in
+  let c_path = path |> Ctypes.(CArray.of_string) |> Ctypes.CArray.start in
 
   let gc_handles = ref (Some (gc_arg_handles, gc_env_handles, c_cwd, c_path)) in
 
